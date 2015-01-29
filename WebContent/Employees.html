@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Employees</title>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="resources/bootstrap/css/bootstrap.min.css" />
+<link href="styles/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="styles/font-awesome-4.1.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+
+<!-- Custom CSS -->
+<link href="styles/css/sb-admin.css" rel="stylesheet">
+
+<!-- <!-- Morris Charts CSS -->
+<link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script type="text/javascript">
+	var EmployeesModelSave = function() {
+		var self = this;
+
+		self.employeeId = ko.observable();
+		self.name = ko.observable();
+		self.surname = ko.observable();
+		self.telephone = ko.observable();
+		self.address = ko.observable();
+
+		var EmployeesObject = {
+			employeeId : self.employeeId,
+			name : self.name,
+			surname : self.surname,
+			telephone : self.telephone,
+			address : self.address,
+		};
+
+		self.EmployeesObject = ko.observable();
+		self.EmployeesObject = ko.observableArray([]);
+
+		self.saveClerk = function() {
+			$
+					.ajax({
+						data : ko.toJSON(EmployeesObject),
+						type : 'POST',
+						url : 'http://localhost:8080/ERPAccounting/rest/employeesController/savingClerk',
+						contentType : 'application/json',
+						dataType : "json",
+
+						success : function(data) {
+							console.log(data);
+							self.EmployeesObject.push(data);
+							console.log(data);
+
+							alert("Employee Successful Added");
+						},
+						error : function() {
+							//alert("error contact administration");
+						}
+					});
+		};
+
+		self.saveManager = function() {
+			$
+					.ajax({
+						data : ko.toJSON(EmployeesObject),
+						type : 'POST',
+						url : 'http://localhost:8080/ERPAccounting/rest/employeesController/savingManager',
+						contentType : 'application/json',
+						dataType : "json",
+						success : function(data) {
+							self.EmployeesObject.push(data);
+							console.log(data);
+
+							alert("Employee Successful Added")
+						},
+						error : function() {
+							//alert("error contact administration");
+						}
+					});
+		};
+
+	}
+
+	$(document).ready(function() {
+
+		var employeesModelSave = new EmployeesModelSave();
+
+		ko.applyBindings(employeesModelSave);
+	});
+</script>
+</head>
+<body>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Employee Id :</label>
+		<div class="col-sm-10">
+			<input type="number" id="employeeId" class="form-control"
+				placeholder="Employee Id" data-bind="value: $root.employeeId"
+				autofocus="autofocus" autocomplete="on">
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Name :</label>
+		<div class="col-sm-10">
+			<input type="text" id="name" class="form-control" placeholder="Name"
+				data-bind="value: $root.name" autocomplete="on">
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Surname :</label>
+		<div class="col-sm-10">
+			<input type="text" id="surname" class="form-control"
+				placeholder="Surname" data-bind="value: $root.surname"
+				autocomplete="on">
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Telephone :</label>
+		<div class="col-sm-10">
+			<input type="number" id="telephone" class="form-control"
+				placeholder="Telephone" data-bind="value: $root.telephone"
+				autocomplete="on">
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Address :</label>
+		<div class="col-sm-10">
+			<input type="text" id="address" class="form-control"
+				placeholder="Address" data-bind="value: $root.address"
+				autocomplete="on">
+		</div>
+	</div>
+
+	<br>
+	<br>
+	<p align="center">
+		<button type="submit" data-bind="click: $root.saveClerk"
+			class="btn btn-default btn-primary" value="Save Employee">Save
+			Clerk</button>
+		<button type="submit" data-bind="click: $root.saveManager"
+			class="btn btn-default btn-primary" value="Save Employee">Save
+			Manager</button>
+	</p>
+
+</body>
+
+</html>

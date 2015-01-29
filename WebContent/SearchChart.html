@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Chat Records</title>
+
+
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+<script>  	
+$(document).ready(function () {
+
+    function chatVewModel()
+    {	
+		var self = this;
+    	
+		function searchChatObject(chartId, chartNumber, chartDescription)
+		{
+			
+			this.chartId = ko.observable(chartId);
+			this.chartNumber = ko.observable(chartNumber);
+			this.chartDescription = ko.observable(chartDescription);
+		
+		}
+			
+		
+		self.chartArrayList=ko.observableArray([]);
+
+    	self.searchChats = function(){
+    		var chartId=parseFloat($('#chart_Id').val());
+    		$.ajax({
+    			
+    		url:"http://localhost:8080/ERPAccounting/rest/chartController/getChartAcc/"+chartId,
+    		type:'GET',
+    		dataType:'json',
+    		contentType:"application/json",
+    		 success:function(chatData){
+    			 	 
+    			 self.chartArrayList.push(new searchChatObject(chatData.chartId,chatData.chartNumber, chatData.chartDescription));		
+    		 
+    		 },
+    		 error:function(chatData,status)
+    		 {
+    			 alert(status+" error occured")
+    		 }
+    		});
+    	}; 	
+    };
+
+    ko.applyBindings(new chatVewModel());
+});
+
+</script>
+</head>
+<body>
+	<div id="wrapper">
+  <div id="page-wrapper"> 		
+
+		
+   			 <label>Charts Id :</label>
+			<input type="number"  id="chart_Id" placeholder="'ChartsId'">
+			<input type="submit" data-bind="click:searchChats" class="btn btn-default btn-primary" value="Search" >	
+			<span class="help-block">You need to know the chart id before you search</span>
+			
+			
+			<div align ="center" class="panel panel-default">
+ <div class="panel-heading" class="panel panel-info">View Chart of Accounts </div>
+ <table class="table table-striped" class="table table-bordered" class="table table-hover" id="charttable">
+ 
+ <thead>
+    <tr class="success"> 
+        <th scope="col">ChartId</th>
+        <th scope="col">ChartNumber</th>
+        <th scope="col">Description</th> 
+     </tr> 
+     </thead>
+				<tbody data-bind='foreach:chartArrayList'>
+					<tr>
+						<td data-bind='text: chartId'></td>
+						<td data-bind='text: chartNumber'></td>
+						<td data-bind='text: chartDescription' ></td> 
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</div>
+	
+</body>
+</html>

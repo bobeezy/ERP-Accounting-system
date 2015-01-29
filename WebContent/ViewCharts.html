@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Chart of Accounts</title>
+
+<link rel="stylesheet" type="text/css" href="styles/CssFile.css">
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+<script type="text/javascript" src="resources/jquery.js"></script>
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+
+<script type="text/javascript">
+
+
+$(document).ready(function(event) {
+	
+	function viewTable()
+	{		
+		var self=this;
+	
+		self.displayingAllCharts=function()
+		{
+			$.ajax
+			({
+			url:"http://localhost:8080/ERPAccounting/rest/chartController/getAllCharts",
+			type:'GET',
+			dataType:'json',
+			
+			success:function(data)
+			{
+				$.each(data,function(index,value)
+						{
+							
+							$('#chartId').val(value.chartId)
+							$('#chartNumber').val(value.chartNumber)
+							$('#chartDescription').val(value.chartDescription)
+							
+							alert(index+" : " +value.chartId+" : "+value.chartNumber+":"+value.chartDescription)
+						});
+			},
+			error:function(data,status,er)
+			{
+				alert(data, status,er)
+			}
+		});
+	}
+		
+		self.showTable=function()
+		{
+			 $.get('http://localhost:8080/ERPAccounting/rest/chartController/getAllCharts',function(responseJson) {
+				   if(responseJson!=null){
+	   	   $("#charttable").find("tr:gt(0)").remove();
+	   	   var table1 = $("#charttable");
+	          $.each(responseJson, function(key,value)
+	        		  
+	        		  { 
+	         	   var rowNew = $("<tr><td></td><td></td><td></td></tr>");
+	                rowNew.children().eq(0).text(value['chartId']); 
+	                rowNew.children().eq(1).text(value['chartNumber']); 
+	                rowNew.children().eq(2).text(value['chartDescription']);
+	                rowNew.appendTo(table1);
+	            });
+	         }
+	    	}); 
+	     $("#tablediv").show();
+		
+		}		   
+	};
+	
+	ko.applyBindings(new viewTable())
+});
+
+</script>
+</head>
+<body>
+
+<div id="wrapper">
+  <div id="page-wrapper"> 
+<div id="tablediv">
+
+<button data-bind='click:showTable' class="btn btn-default btn-primary">Show Table</button>
+<div align ="center" class="panel panel-default">
+ <div class="panel-heading" class="panel panel-info">View Chart of Accounts </div>
+ <table class="table table-striped" class="table table-bordered" class="table table-hover" id="charttable">
+ 
+ <thead>
+    <tr class="success"> 
+        <th scope="col">ChartId</th>
+        <th scope="col">ChartNumber</th>
+        <th scope="col">Description</th> 
+     </tr> 
+     </thead>
+  </table>
+</div>
+</div>
+</div>
+</div>
+</body>
+
+</html>

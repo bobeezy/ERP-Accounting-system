@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Chart of Account</title>
+
+
+<script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/sammy.js"></script>
+
+<link href="styles/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="styles/font-awesome-4.1.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+
+<!-- Custom CSS -->
+<link href="styles/css/sb-admin.css" rel="stylesheet">
+
+
+<script>
+	var ChartModelSave = function() {
+		var self = this;
+
+		self.chartId = ko.observable();
+		self.chartNumber = ko.observable();
+		self.chartDescription = ko.observable();
+
+		var ChartObject = {
+			chartId : self.chartId,
+			chartNumber : self.chartNumber,
+			chartDescription : self.chartDescription,
+
+		};
+
+		self.ChartObject = ko.observable();
+		self.ChartObject = ko.observableArray([]);
+
+		self.saveMoneyIn = function() {
+			$
+					.ajax({
+
+						type : 'POST',
+						url : 'http://localhost:8080/ERPAccounting/rest/chartController/savingMoneyIn',
+						data : ko.toJSON(ChartObject),
+						contentType : 'application/json',
+						dataType : "json",
+
+						success : function(data) {
+							self.ChartObject.push(data);
+							console.log(data);
+
+							self.chartId(data.chartId);
+							alert("Chart of Account is successful saved");
+						},
+						error : function() {
+							//alert("error contact administration");
+						}
+					});
+		};
+
+		self.saveMoneyOut = function() {
+			$
+					.ajax({
+
+						type : 'POST',
+						url : 'http://localhost:8080/ERPAccounting/rest/chartController/savingMoneyOut',
+						data : ko.toJSON(ChartObject),
+						contentType : 'application/json',
+						dataType : "json",
+
+						success : function(data) {
+							self.ChartObject.push(data);
+
+							alert("Chart of Account is successful saved");
+						},
+						error : function() {
+							alert("error contact administration");
+						}
+					});
+		};
+
+	}
+
+	$(document).ready(function() {
+
+		var chartModelSave = new ChartModelSave();
+
+		ko.applyBindings(chartModelSave);
+	});
+</script>
+</head>
+<body>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Chart Id :</label>
+		<div class="col-sm-10">
+			<input type="number" id="chartId" class="form-control"
+				placeholder="Chart Id" data-bind="value: $root.chartId"
+				autofocus="autofocus" autocomplete="on">
+		</div>
+	</div>
+
+	<br>
+	<br>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Chart Number :</label>
+		<div class="col-sm-10">
+			<input type="number" id="chartNumber" class="form-control"
+				placeholder="Chart Number" data-bind="value: $root.chartNumber"
+				autocomplete="on">
+		</div>
+	</div>
+
+	<br>
+	<br>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Chart Description :</label>
+		<div class="col-sm-10">
+			<input type="text" id="chartDescription" class="form-control"
+				placeholder="Chart Description"
+				data-bind="value: $root.chartDescription" autocomplete="on">
+		</div>
+	</div>
+
+	<br>
+	<br>
+	<p align="center">
+
+		<button type="submit" class="btn btn-default btn-primary"
+			data-bind="click: $root.saveMoneyIn" value="Save MoneyIn">Save
+			MoneyIn</button>
+
+		<button type="submit" class="btn btn-default btn-primary"
+			data-bind="click: $root.saveMoneyOut" value="Save MoneyOut">Save
+			MoneyOut</button>
+	</p>
+
+
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+ <script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/sammy.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script>
+  
+(function($){
+	
+	var runApp=$.sammy('#index',function()
+			{
+	
+				this.get('#/employees', function(context)
+						{
+					this.partial('Employees.html')
+						});
+				
+				this.get('#/viewEmployees', function(context)
+						{
+							this.partial('ViewEmployees.html')
+						});
+				
+				this.get('#/searchEmployee', function(context)
+						{
+							this.partial('SearchEmployee.html')
+						});
+				this.get('#/UpdateEmployee', function(context)
+						{
+							this.partial('UpdateEmployee.html')
+						});
+		
+			});
+	
+	$(function()
+			{
+				runApp.run('#/')
+			})
+	
+	
+})(jQuery);
+
+</script>
+
+</head>
+<body>
+<div id="wrap">
+	
+                           
+<ul class ="nav nav-tabs" style="margin: 20px;">
+<li><a href="#/employees"><font size="3">Register Employee</font></a></li>
+<li><a href="#/viewEmployees"><font size="3">View Employees</font></a></li>
+<li><a href="#/searchEmployee"><font size="3">Search Employees</font></a></li>
+<li><a href="#/UpdateEmployee"><font size="3">Update Employees</font></a></li>
+</ul>
+
+ </div>
+	<div id = "index">
+	<p id = "employees"></p>
+	<p id = "viewEmployees"></p>
+	<p id = "searchEmployee"></p>
+	<p id="UpdateEmployee"></p>
+	</div>
+
+
+</body>
+</html>

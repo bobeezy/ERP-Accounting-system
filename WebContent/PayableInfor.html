@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+ <script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/sammy.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script>
+  
+(function($){
+	
+	var runApp=$.sammy('#index',function()
+			{
+	
+				
+				this.get('#/payables', function(context)
+						{
+							
+							this.partial('Payables.html')
+						});
+				
+				this.get('#/viewPayables', function(context)
+						{
+							
+							this.partial('ViewPayables.html')
+						});
+				
+				this.get('#/searchPayable', function(context)
+						{
+							
+							this.partial('SearchPayable.html')
+						});
+		
+				this.get('#/updatePayable', function(context)
+						{
+							
+							this.partial('UpdatePayables.html')
+						});
+		
+			});
+	
+	$(function()
+			{
+				runApp.run('#/')
+			})
+	
+	
+})(jQuery);
+
+</script>
+
+</head>
+<body>
+<div id="wrap">
+<ul class ="nav nav-tabs" style="margin: 20px;">
+<li><a href="#/payables"><font size="3">Add Payables</font></a></li>
+<li><a href="#/viewPayables"><font size="3">View Payables</font></a></li>
+<li><a href="#/searchPayable"><font size="3">Search Payables</font></a></li>
+<li><a href="#/updatePayable"><font size="3">Update Payables</font></a></li>
+</ul>
+</div>
+	<div id = "index">
+	<p id = "payables"></p>
+	<p id = "viewPayables"></p>
+	<p id = "searchPayable"></p>
+	<p id = "updatePayable"></p>
+	</div>
+
+</body>
+</html>

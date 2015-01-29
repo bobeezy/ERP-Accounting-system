@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Payable Records</title>
+
+
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+
+<link href="styles/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="styles/font-awesome-4.1.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+
+<!-- Custom CSS -->
+<link href="styles/css/sb-admin.css" rel="stylesheet">
+
+<!-- <!-- Morris Charts CSS -->
+<link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						function payableVewModel() {
+							var self = this;
+
+							function searchPayableObject(folioNumber,
+									payableType, transactionDate, amount,
+									employees, charts) {
+
+								this.folioNumber = ko.observable(folioNumber);
+								this.payableType = ko.observable(payableType);
+								this.transactionDate = ko
+										.observable(transactionDate);
+								this.amount = ko.observable(amount);
+								this.employees = ko.observable(employees);
+								this.charts = ko.observable(charts);
+
+							}
+
+							self.payableArrayList = ko.observableArray([]);
+
+							self.searchPayable = function() {
+								var folioNumber = parseFloat($('#folio_Number').val());
+								$
+										.ajax({
+
+											url : "http://localhost:8080/ERPAccounting/rest/payablesController/getPayable/"+ folioNumber,
+											type : 'GET',
+											dataType : 'json',
+											contentType : "application/json",
+											success : function(payableData) {
+
+												self.payableArrayList
+														.push(new searchPayableObject(
+																payableData.folioNumber,
+																payableData.payableType,
+																payableData.transactionDate,
+																payableData.amount,
+																payableData.employees,
+																payableData.charts));
+
+											},
+											error : function(payableData,
+													status) {
+												alert(status + " error occured")
+											}
+										});
+							};
+						}
+						;
+
+						ko.applyBindings(new payableVewModel());
+					});
+</script>
+</head>
+<body>
+
+	<div id="wrapper">
+		<div id="page-wrapper">
+
+			<label>Folio Number :</label>
+			 <input type="number"
+				id="folio_Number" placeholder="'Folio Number'" autocomplete="on" autofocus="autofocus">
+				<input type="submit" data-bind="click:searchPayable"
+				class="btn btn-default btn-primary" value="Search">
+				 <span
+				class="help-block">You need to know folio number
+				before you search</span>
+
+			<div align="center" class="panel panel-default">
+				<div class="panel-heading" class="panel panel-info">View All
+					Payables</div>
+
+<table class="table table-striped" class="table table-bordered"
+					class="table table-hover">
+
+					<thead>
+						<tr class="success">
+							<th>Folio Number</th>
+							<th>Payable Type</th>
+							<th>Transaction Date</th>
+							<th>Amount</th>
+							<th>Employee </th>
+							<th>Charts</th>
+						</tr>
+					</thead>
+					<tbody data-bind='foreach:payableArrayList'>
+						<tr>
+							<td data-bind='text: folioNumber'></td>
+							<td data-bind='text: payableType'></td>
+							<td data-bind='text: transactionDate'></td>
+							<td data-bind='text: amount'></td>
+							<td data-bind='text: employees'></td>
+							<td data-bind='text: charts'></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

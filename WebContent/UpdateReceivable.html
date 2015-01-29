@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Update Receivables</title>
+</head>
+<body>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+</head>
+<script>
+$(document).ready(function(event) {
+	
+	var searchReceivables=function (){
+		var self=this;
+			
+			this.folioNumber = ko.observable();
+			this.receivableType = ko.observable();
+			this.transactionDate = ko.observable();
+			this.amount=ko.observable();
+			this.employees = ko.observable();
+			this.charts = ko.observable(); 
+	
+		 var receivableData = {
+				 folioNumber : this.folioNumber,
+				 receivableType:this.receivableType,
+				 transactionDate : this.transactionDate,
+				 amount : this.amount,
+				  employees : this.employees,
+				 charts : this.charts, 
+			
+		 }
+		 
+		self.receivableData=ko.observable();
+		self.ReceivableArrayList=ko.observableArray([]);
+		
+		self.searchreceivables = function() {
+			var folioNumber = parseFloat($('#folio_Number')
+					.val());
+			$
+					.ajax({
+
+						url : "http://localhost:8080/ERPAccounting/rest/receivablesController/getReceivable/"
+								+ folioNumber,
+						type : 'GET',
+						dataType : 'json',
+						contentType : "application/json",
+    		 success:function(receivableData){
+    			 	 
+    			 self .folioNumber(receivableData.folioNumber);
+    			 self.receivableType(receivableData.receivableType);
+    			 self.transactionDate (receivableData.transactionDate);
+    			 self.amount(receivableData.amount);
+    			 self.charts(receivableData.charts);
+    			 self.employees(receivableData.employees);
+    			 
+    			
+    		 },
+    		 error:function(receivableData,status)
+    		 {
+    			 alert(status+" error occured")
+    			 
+    		 }
+    		 
+    		 });//ajax call
+    		
+    		};//search function
+    		
+		 
+    		 self.updateReceivable=function(){
+    			 console.log(receivableData)
+    			 
+    				    $.ajax({
+    				            type:'PUT',
+    				            url:"http://localhost:8080/ERPAccounting/rest/receivablesController/updateReceivable",
+    		    	    		data:ko.toJSON(receivableData),
+    				            
+    				            contentType: 'application/json',
+    				            dataType:"json",
+    				            success: function(data){
+    				            	
+    				            	console.log(data);
+    				            alert("Saved Successfully");
+    				             
+    				            },
+    	    		error:function(status)
+    	    		 {
+    	    			 alert(status+" error occured")
+    	    		 }
+    		});	//ajax call	
+
+    				    };	//update
+			
+    		 };//model
+    		 
+    		 ko.applyBindings(new searchReceivables());
+		
+		}); //first
+</script>
+</body>
+<div id="wrapper">
+		<div id="page-wrapper">
+
+			<label>Folio Number :</label>
+					 <input type="number"
+						id="folio_Number" placeholder="Folio Number" autocomplete="on" autofocus>
+						<input type="submit" data-bind="click:searchreceivables"
+						class="btn btn-default btn-primary" value="Search">
+						 <span
+						class="help-block">You need to know folio Number
+						before you search</span>
+
+			<div align="center" class="panel panel-default">
+				<div class="panel-heading" class="panel panel-info">View All
+					Payables</div>
+					
+			<table class="table table-striped" class="table table-bordered"
+					class="table table-hover">
+		
+				<tbody>
+					<tr>
+						<td>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Folio Number :</label>
+								
+									<input type="text" class="form-control" name="folioNumber"
+										data-bind="value: folioNumber" readonly="readonly">
+								
+							</div>
+   
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Payable Type :</label>
+								
+									<input type="text" class="form-control" name="receivableType"
+										data-bind="value: receivableType">
+								
+							</div>
+
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Transaction Date:</label>
+								
+									<input type="text" class="form-control" name="transactionDate"
+										data-bind="value: transactionDate">
+								
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Amount</label>
+								
+									<input type="text" class="form-control" name="amount"
+										data-bind="value: amount">
+								
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Employee Name :</label>
+								
+									<input type="text" class="form-control" name="employees"
+										data-bind="value: employees">
+								
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Charts Description</label>
+								
+									<input type="text" class="form-control" name="charts"
+										data-bind="value: charts">
+								
+							</div>
+
+								<p align="center">	<button type="submit" data-bind="click:$root.updateReceivable"
+										value="Update Receivable" class= "btn btn-default btn-primary">Update Receivable</button></p>
+						</td>
+
+
+						
+
+						
+
+					</tr>
+				</tbody>
+			</table>
+
+</div>
+
+		</div>
+
+	</div>
+</html>

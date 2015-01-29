@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Update Employee</title>
+
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+</head>
+<script>
+$(document).ready(function(event) {
+	
+	var searchEmployees=function (){
+		var self=this;
+			
+			this.employeeId = ko.observable();
+			this.name = ko.observable();
+			this.surname = ko.observable();
+			this.telephone=ko.observable();
+			this.address=ko.observable();
+		 
+		 var empData = {
+				employeeId : this.employeeId,
+				name : this.name,
+				surname : this.surname,
+				telephone : this.telephone,
+				address : this.address,
+			} 
+		 
+		self.empData=ko.observable();
+		self.employeeArrayList=ko.observableArray([]);
+		
+		 self.searchEmployee = function(){
+    		var employeeId=parseFloat($('#employee_Id').val());
+    		$.ajax({
+    			
+    			type:'GET',
+    			url:"http://localhost:8080/ERPAccounting/rest/employeesController/getEmpById/"+employeeId,
+    			data: ko.toJSON(empData),
+    		
+    		dataType:'json',
+    		contentType:"application/json",
+    		 success:function(empData){
+    			 	 
+    		
+    		
+    		self.employeeId(empData.employeeId);
+    		self.name(empData.name);
+    		self.surname(empData.surname);
+    		self.telephone(empData.telephone);
+    		self.address(empData.address);
+    		 },
+    		 error:function(empData,status)
+    		 {
+    			 alert(status+" error occured")
+    			 
+    		 }
+    		 
+    		 });
+    		
+    		};
+    		
+		 
+    		 self.updateEmployee=function(){
+    			 console.log(empData)
+    			 
+    				    $.ajax({
+    				            type:'PUT',
+    				            url:"http://localhost:8080/ERPAccounting/rest/employeesController/UpdateEmployee",
+    		    	    		data:ko.toJSON(empData),
+    				            
+    				            contentType: 'application/json',
+    				            dataType:"json",
+    				            success: function(data){
+    				            	
+    				            	console.log(data);
+    				            alert("Saved Successfully");
+    				             
+    				            },
+    	    		error:function(status)
+    	    		 {
+    	    			 alert(status+" error occured")
+    	    		 }
+    		});		
+
+    				    };	
+			
+    		 };
+    		 
+    		 ko.applyBindings(new searchEmployees());
+		
+		});
+</script>
+<body>
+
+	
+	<div id="wrapper">
+		<div id="page-wrapper">
+
+	<input type="submit" data-bind="click:searchEmployee" class="btn btn-primary" value="Search">	
+			<input type="text"  id="employee_Id" placeholder="Employee Id">
+			<span
+				class="help-block">You need to know the type of employee id
+				before you search</span>
+			
+			
+			<div align="center" class="panel panel-default">
+				<div class="panel-heading" class="panel panel-info">Edit 
+					Employee Information</div>
+			<table class="table table-striped" class="table table-bordered"
+					class="table table-hover">
+		
+				<tbody>
+					<tr>
+						<td>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Employee ID</label>
+								
+									<input type="text" class="form-control" name="employeeId"
+										data-bind="value: employeeId" readonly="readonly">
+								
+							</div>
+   
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Name</label>
+								
+									<input type="text" class="form-control" name="name"
+										data-bind="value: name" autofocus="autofocus" autocomplete="on">
+								
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Surname</label>
+						
+									<input type="text" class="form-control" name="surname"
+										data-bind="value: surname" autocomplete="on">
+								
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Telephone</label>
+								
+									<input type="number" class="form-control" name="telephone"
+										data-bind="value: telephone" autocomplete="on" min=10 max=12>
+								
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Address</label>
+								
+									<input type="text" class="form-control" name="address"
+										data-bind="value: address">
+								
+							</div>
+
+								<p align="center">	<button type="submit" data-bind="click:$root.updateEmployee"
+										value="Update Employee" class= "btn btn-default btn-primary">Update Employee</button></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+</div>
+
+		</div>
+
+	</div>
+</body>
+</html>

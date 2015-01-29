@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Payable</title>
+<link rel="stylesheet" type="text/css" href="styles/CssFile.css">
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+
+<script type="text/javascript">
+
+
+$(document).ready(
+		function(){
+			
+			
+			function payablessViewModel(){
+				
+				var self=this;
+				
+				self.folioNumber=ko.observable();
+				self.payableType=ko.observable();
+				self.transactionDate=ko.observable();
+				self.amount=ko.observable();
+				self.employees=ko.observable();
+				self.charts=ko.observable();
+				
+				var payabless={
+						folioNumber:self.folioNumber,
+						payableType:self.payableType,
+						transactionDate:self.transactionDate,
+						amount:self.amount,
+						employees:self.employees,
+						charts:self.charts
+				}
+				
+				self.allEmployees=ko.observableArray([]);
+				self.allChartOfAccount=ko.observableArray([]);
+				
+			
+				
+				$.getJSON("http://localhost:8080/ERPAccounting/rest/employeesController/getAllEmployees",
+						
+						null, function(employeeData, status,xhr){
+					
+					$.each(employeeData, function(index, value){
+						self.allEmployees.push(value);
+						console.log(value)
+					});
+					
+				});
+				
+				 	$.getJSON("http://localhost:8080/ERPAccounting/rest/chartController/getAllCharts",
+						
+						null, function(chartsData, status,xhr){
+					
+					$.each(chartsData, function(index, value){
+						self.allChartOfAccount.push(value);
+						console.log(value)
+					});
+					
+				}); 
+					
+					
+					self.savePayables=function()
+					{
+						$.ajax({
+							
+							type:'POST',
+							url:'http://localhost:8080/ERPAccounting/rest/payablesController/savingPayments',
+							data:ko.toJSON(payabless),
+							contentType:'application/json',
+							dataType:"json",
+							
+							success:function(data)
+							{
+								self.payabless.push(data);
+								alert("Successful Added")
+							}
+								
+						});
+						
+						self.folioNumber("");
+						self.payableType("");
+						self.transactionDate("");
+						self.amount("");
+						
+						
+						};
+				
+				};
+				
+				ko.applyBindings(new payablessViewModel());
+			
+		});
+
+		
+</script>
+</head>
+<body>
+
+<h3 align="center">Enter Payable Info</h3>
+
+		<div class="form-group">
+ 		<label class="col-sm-2 control-label">Folio number :</label>
+ 			<div class="col-sm-10 ">
+  				<input  type = "text" id="folioNumber" class="form-control" 
+  				data-bind="value: $root.folioNumber" placeholder ="Folio number">
+ 			</div>
+	</div>
+	<br><br>
+	<div class="form-group">
+ 		<label class="col-sm-2 control-label">Payables Description  :</label>
+ 			<div class="col-sm-10 ">
+  				<input  type = "text" id="payableType" class="form-control" 
+  				data-bind="value: $root.payableType" placeholder ="Description ">
+ 			</div>
+	</div>
+	<br><br>
+	<div class="form-group">
+ 		<label class="col-sm-2 control-label">Transaction Date  :</label>
+ 			<div class="col-sm-10 ">
+  				<input  type = "date" id="transactionDate" class="form-control" 
+  				data-bind="value: $root.transactionDate" placeholder ="Transaction Date">
+ 			</div>
+	</div>
+		<br><br>
+		<div class="form-group">
+ 		<label class="col-sm-2 control-label">Amount  :</label>
+ 			<div class="col-sm-10 ">
+  				<input  type = "text" id="amount"class="form-control" 
+  				data-bind="value: $root.amount" placeholder ="Amount">
+ 			</div>
+	</div>
+		<br><br>
+			
+		<div class="form-group">
+ 			<label class="col-sm-2 control-label">Select Employee :</label>
+ 				<div class="col-sm-10 ">
+					<select class="form-control" 
+					data-bind="options: $root.allEmployees, value: employees, optionsText: 'name' ">
+					</select>
+				</div>
+		</div>
+		<br><br>
+		<div class="form-group">
+ 			<label class="col-sm-2 control-label">Select Charts :</label>
+ 				<div class="col-sm-10 ">
+					<select class="form-control" 
+					data-bind="options: $root.allChartOfAccount, value: charts, optionsText: 'chartDescription' ">
+					</select>
+			</div>
+		</div>
+		<br><br>
+		<p align="center">	<button type="submit" data-bind="click: $root.savePayables"
+					value="Save Payable" class="btn btn-default btn-primary">Save Payable</button></p>
+				
+	
+</body>
+
+</html>

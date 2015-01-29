@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Index</title>
+ <script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/sammy.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css" />
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+   
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+   
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+
+   
+
+
+<script>
+  
+(function($){
+	
+	var runApp=$.sammy('#index2',function()
+			{
+		this.get('#/manageEmployee', function(context)
+				{
+					this.partial('ManageEmployee.html')
+			
+				});
+		
+		this.get('#/payableInfor', function(context)
+				{
+					this.partial('PayableInfor.html')
+				});
+		
+		this.get('#/chartOfAccountInfor', function(context)
+				{
+				
+					this.partial('ChartOfAccountInfor.html')
+				});
+		
+		this.get('#/receivableInfor', function(context)
+				{
+					this.partial('ReceivableInfor.html')
+				});
+			});
+	
+	$(function()
+			{
+				runApp.run('#/')
+			})
+	
+	
+})(jQuery);
+
+
+
+
+</script>
+
+
+</head>
+<body>
+<div id="wrapper">
+
+  <div id="page-wrapper"> 
+
+            <div class="container-fluid">
+
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header" align="center">
+                           Accounting System Management
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-dashboard"></i> Home
+                            </li>
+                        </ol>
+                    </div>
+                    </div>
+                    </div>
+                   
+                    
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active">
+                        <a href="index1.html"><i class="fa fa-fw fa-dashboard"></i><font size="6"></font> Home</a>
+                    </li>
+                    <li>
+                        <a href="#/manageEmployee"><i class="fa fa-fw fa-user"></i><font size="6"></font>Employees</a>
+                    </li>
+                    <li>
+                        <a href="#/payableInfor"><i class="fa fa-fw fa-table"></i><font size="6"></font>Payables</a>
+                    </li>
+                    <li>
+                        <a href="#/receivableInfor"><i class="fa fa-fw fa-table"></i><font size="6"></font> Receivables</a>
+                    </li>
+                    <li>
+                        <a href="#/chartOfAccountInfor"><i class="fa fa-fw fa-table"></i><font size="6"></font> Charts of Accounts</a>
+                    </li>
+                    
+			</ul>
+			</div>
+			
+			<div id="index2">
+			<p id="manageEmployee">
+			<p id="payableInfor">
+			<p id="chartOfAccountInfor">
+			<p id="receivableInfor">
+
+			</div>
+			
+		 </div> 
+		 <br>
+			 <!-- FOOTER -->
+    <div id="footer" align="center">
+        <p>&copy; Basement Software &nbsp;2014 &nbsp;</p>
+    </div>
+
+			
+	</div>
+</body>
+
+</html>

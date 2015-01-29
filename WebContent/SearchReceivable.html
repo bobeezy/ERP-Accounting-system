@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Search Receivable</title>
+
+
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+
+<link href="styles/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="styles/font-awesome-4.1.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+
+<!-- Custom CSS -->
+<link href="styles/css/sb-admin.css" rel="stylesheet">
+
+<!-- <!-- Morris Charts CSS -->
+<link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						function receivableVewModel() {
+							var self = this;
+
+							function searchreceivableObject(folioNumber,
+									receivableType, transactionDate, amount,employees,charts) {
+
+								this.folioNumber = ko.observable(folioNumber);
+								this.receivableType = ko
+										.observable(receivableType);
+								this.transactionDate = ko
+										.observable(transactionDate);
+								this.amount = ko.observable(amount);
+								this.employees = ko.observable(employees);
+								this.charts = ko.observable(charts);
+
+							}
+
+							self.receivableArrayList = ko.observableArray([]);
+
+							self.searchreceivables = function() {
+								var folioNumber = parseFloat($('#folio_Number')
+										.val());
+								$
+										.ajax({
+
+											url : "http://localhost:8080/ERPAccounting/rest/receivablesController/getReceivable/"
+													+ folioNumber,
+											type : 'GET',
+											dataType : 'json',
+											contentType : "application/json",
+											success : function(receivableData) {
+												console.log(receivableData);
+												self.receivableArrayList
+														.push(new searchreceivableObject(
+																receivableData.folioNumber,
+																receivableData.receivableType,
+																receivableData.transactionDate,
+																receivableData.amount,
+																receivableData.employees,
+																receivableData.charts));
+
+											},
+											error : function(receivableData,
+													status) {
+												alert(status + " error occured")
+											}
+										});
+							};
+						}
+						;
+
+						ko.applyBindings(new receivableVewModel());
+					});
+</script>
+</head>
+<body>
+	<div id="wrapper">
+
+		<div id="page-wrapper">
+					<label>Folio Number :</label>
+					 <input type="number"
+						id="folio_Number" placeholder="Folio Number" autocomplete="on" autofocus>
+						<input type="submit" data-bind="click:searchreceivables"
+						class="btn btn-default btn-primary" value="Search">
+						 <span
+						class="help-block">You need to know folio Number
+						before you search</span>
+
+					<div align="center" class="panel panel-default">
+						<div class="panel-heading" class="panel panel-info">View All
+							Receivables</div>
+
+
+						<table class="table table-striped" class="table table-bordered"
+							class="table table-hover">
+
+							<thead>
+								<tr class="success">
+									<th scope="col">Folio Number</th>
+									<th scope="col">Receivables Type</th>
+									<th scope="col">Date</th>
+									<th scope="col">Amount</th>
+									<th scope="col">Employee</th>
+									<th scope="col">Charts</th>
+
+								</tr>
+							<tbody data-bind='foreach:receivableArrayList'>
+								<tr>
+									<td data-bind='text: folioNumber'></td>
+									<td data-bind='text: receivableType'></td>
+									<td data-bind='text: transactionDate'></td>
+									<td data-bind='text: amount'></td>
+									<td data-bind='text: employees'></td>
+									<td data-bind='text:charts'></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		
+</body>
+</html>

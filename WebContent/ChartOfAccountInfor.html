@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Charts</title>
+<script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/sammy.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script>
+  
+(function($){
+	
+	var runApp=$.sammy('#index3',function()
+			{
+	
+				this.get('#/chartOfAccount', function(context)
+						{
+							
+							this.partial('ChartOfAccount.html')
+						});
+				
+				this.get('#/viewCharts', function(context)
+						{
+							
+							this.partial('ViewCharts.html')
+						});
+				
+				this.get('#/searchChart', function(context)
+						{
+						
+							this.partial('SearchChart.html')
+						});
+
+				this.get('#/UpdateCharts', function(context)
+						{
+					
+							this.partial('UpdateChartsOfAccount.html')
+						});
+		
+				
+			});
+	
+	$(function()
+			{
+				runApp.run('#/')
+			})
+	
+	
+})(jQuery);
+
+</script>
+
+</head>
+<body>
+<div id="wrap">
+<ul class ="nav nav-tabs" style="margin: 20px;">
+<li><a href="#/chartOfAccount"><font size="3">Add Chart Of Account</font></a></li>
+<li><a href="#/viewCharts"><font size="3">View Chart Of Account</font></a></li>
+<li><a href="#/searchChart"><font size="3">Search Chart Of Account</font></a></li>
+<li><a href="#/UpdateCharts"><font size="3">Update Chart Of Account</font></a></li>
+</ul>
+</div>
+	<div id = "index3" >
+	<p id = "chartOfAccount"></p>
+	<p id = "viewCharts"></p>
+	<p id = "searchChart"></p>
+	<p id = "UpdateCharts"></p>
+	</div>
+
+</body>
+</html>

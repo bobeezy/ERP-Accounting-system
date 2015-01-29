@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+</head>
+<script>
+$(document).ready(function(event) {
+	
+	var searchPayables=function (){
+		var self=this;
+			
+			this.folioNumber = ko.observable();
+			this.payableType = ko.observable();
+			this.transactionDate = ko.observable();
+			this.amount=ko.observable();
+			this.employees = ko.observable();
+			this.charts = ko.observable(); 
+	
+		 var payableData = {
+				 folioNumber : this.folioNumber,
+				 payableType:this.payableType,
+				 transactionDate : this.transactionDate,
+				 amount : this.amount,
+				  employees : this.employees,
+				 charts : this.charts, 
+			
+		 }
+		 
+		self.payableData=ko.observable();
+		self.PayableArrayList=ko.observableArray([]);
+		
+		 self.searchPayable = function(){
+			 var folioNumber = parseFloat($('#folio_Number').val());
+    		$.ajax({
+    			
+    			type:'GET',
+    			url : "http://localhost:8080/ERPAccounting/rest/payablesController/getPayable/"
+					+ folioNumber,
+    			data: ko.toJSON(payableData),
+    		
+    		dataType:'json',
+    		contentType:"application/json",
+    		 success:function(payableData){
+    			 	 
+    			 self .folioNumber(payableData.folioNumber);
+    			 self.payableType(payableData.payableType);
+    			 self.transactionDate (payableData.transactionDate);
+    			 self.amount(payableData.amount);
+    			 self.charts(payableData.charts);
+    			 self.employees(payableData.employees);
+    			 
+    			
+    		 },
+    		 error:function(payableData,status)
+    		 {
+    			 alert(status+" error occured")
+    			 
+    		 }
+    		 
+    		 });//ajax call
+    		
+    		};//search function
+    		
+		 
+    		 self.updatePayable=function(){
+    			 console.log(payableData)
+    			 
+    				    $.ajax({
+    				            type:'PUT',
+    				            url:"http://localhost:8080/ERPAccounting/rest/payablesController/updatePayables",
+    		    	    		data:ko.toJSON(payableData),
+    				            
+    				            contentType: 'application/json',
+    				            dataType:"json",
+    				            success: function(data){
+    				            	
+    				            	
+    				            alert("Saved Successfully");
+    				             
+    				            },
+    	    		error:function(status)
+    	    		 {
+    	    			 alert(status+" error occured")
+    	    		 }
+    		});	//ajax call	
+
+    				    };	//update
+			
+    		 };//model
+    		 
+    		 ko.applyBindings(new searchPayables());
+		
+		}); //first
+</script>
+</body>
+<div id="wrapper">
+		<div id="page-wrapper">
+			<label>Folio Number :</label>
+			 <input type="number"
+				id="folio_Number" placeholder="'Folio Number'" autocomplete="on" autofocus="autofocus">
+				<input type="submit" data-bind="click:searchPayable"
+				class="btn btn-default btn-primary" value="Search">
+				 <span
+				class="help-block">You need to know folio number
+				before you search</span>
+
+			<div align="center" class="panel panel-default">
+				<div class="panel-heading" class="panel panel-info">View All
+					Payables</div>
+					
+			<table class="table table-striped" class="table table-bordered"
+					class="table table-hover">
+		
+				<tbody>
+					<tr>
+						<td>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Folio Number :</label>
+								
+									<input type="text" class="form-control" name="folioNumber"
+										data-bind="value: folioNumber" readonly="readonly">
+								
+							</div>
+   
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Payable Type :</label>
+								
+									<input type="text" class="form-control" name="payableType"
+										data-bind="value: payableType">
+								
+							</div>
+
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Transaction Date:</label>
+								
+									<input type="text" class="form-control" name="transactionDate"
+										data-bind="value: transactionDate">
+								
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Amount</label>
+								
+									<input type="text" class="form-control" name="amount"
+										data-bind="value: amount">
+								
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Employee Name :</label>
+								
+									<input type="text" class="form-control" name="employees"
+										data-bind="value: employees" readonly="readonly">
+								
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Charts Description</label>
+								
+									<input type="text" class="form-control" name="charts"
+										data-bind="value: charts" readonly="readonly">
+								
+							</div>
+
+								<p align="center">	<button type="submit" data-bind="click:$root.updatePayable"
+										value="Update Payables" class= "btn btn-default btn-primary">Update Payable</button></p>
+						</td>
+
+
+						
+
+						
+
+					</tr>
+				</tbody>
+			</table>
+
+</div>
+
+		</div>
+
+	</div>
+</html>

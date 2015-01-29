@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Employee</title>
+
+
+<link rel="stylesheet" type="text/css" href="styles/CssFile.css">
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+<script type="text/javascript" src="resources/jquery.js"></script>
+
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+<script type="text/javascript">
+
+
+$(document).ready(function(event) {
+	
+	function viewTable()
+	{		
+		var self=this;
+	
+		self.displayingAllEmployees=function()
+		{
+			$.ajax
+			({
+			url:"http://localhost:8080/ERPAccounting/rest/employeesController/getAllEmployees",
+			type:'GET',
+			dataType:'jsonp',
+			
+			success:function(data)
+			{
+				$.each(data,function(index,value)
+						{
+							
+							$('#employeeId').val(value.employeeId)
+							$('#name').val(value.name)
+							$('#surname').val(value.surname)
+							$('#telephone').val(value.telephone)
+							$('#address').val(value.address)
+							
+							alert(index+" : " +value.employeeId+" : "+value.name+":"+value.surname+":"+value.telephone+":"+value.address)
+						});
+			},
+			error:function(data,status,er)
+			{
+				alert(data, status,er)
+			}
+		});
+	}
+		
+		self.showTable=function()
+		{
+			 $.get('http://localhost:8080/ERPAccounting/rest/employeesController/getAllEmployees',function(responseJson) {
+				   if(responseJson!=null){
+	   	   $("#employeestable").find("tr:gt(0)").remove();
+	   	   var table1 = $("#employeestable");
+	          $.each(responseJson, function(key,value)
+	        		  
+	        		  { 
+	         	   var rowNew = $("<tr><td></td><td></td><td></td><td></td><td></td></tr>");
+	                rowNew.children().eq(0).text(value['employeeId']); 
+	                rowNew.children().eq(1).text(value['name']); 
+	                rowNew.children().eq(2).text(value['surname']);
+	                rowNew.children().eq(3).text(value['telephone']);
+	                rowNew.children().eq(4).text(value['address']);
+	                
+	                rowNew.appendTo(table1);
+	            });
+	         }
+	    	}); 
+	     $("#tablediv").show();
+		
+		}		   
+	};
+	
+	ko.applyBindings(new viewTable())
+});
+
+</script>
+</head>
+<body>
+<div id="wrapper">
+
+  <div id="page-wrapper"> 
+<div id="tablediv">
+<div align ="center" class="panel panel-default">
+<button data-bind='click:showTable' class="btn btn-default btn-primary">Show Table</button>
+
+ <div class="panel-heading" class="panel panel-info">View Employee</div>
+ <table class="table table-striped" class="table table-bordered" class="table table-hover" id="employeestable">
+
+ <thead>
+    <tr class="success"> 
+         <th scope="col">Employee Id</th>
+          <th scope="col">Name</th>
+        <th scope="col">Surname</th> 
+         <th scope="col">Telephone</th> 
+         <th scope="col">Address</th>            
+    </tr> 
+    </thead>
+ </table>   
+</div>
+</div>
+</div>
+</div>
+</body>
+
+</html>

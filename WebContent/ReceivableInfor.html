@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+ <script type="text/javascript" src="resources/jquery.js"></script>
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/sammy.js"></script>
+<script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" 	href="resources/bootstrap/css/bootstrap.min.css"  />
+
+ <link href="styles/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <link href="styles/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- Custom CSS -->
+    <link href="styles/css/sb-admin.css" rel="stylesheet">
+
+    <!-- <!-- Morris Charts CSS -->
+    <link href="styles/css/plugins/morris.css" rel="stylesheet">
+
+<script>
+  
+(function($){
+	
+	var runApp=$.sammy('#index',function()
+			{
+				
+				this.get('#/receivable', function(context)
+						{
+							
+							this.partial('Receivable.html')
+						});
+				
+				this.get('#/viewReceivables', function(context)
+						{
+							
+							this.partial('ViewReceivables.html')
+						});
+				
+				this.get('#/searchReceivable', function(context)
+						{
+							
+							this.partial('SearchReceivable.html')
+						});
+				
+				this.get('#/updateReceivable', function(context)
+						{
+							
+							this.partial('UpdateReceivable.html')
+						});
+		
+			});
+	
+	$(function()
+			{
+				runApp.run('#/')
+			})
+	
+	
+})(jQuery);
+
+</script>
+
+</head>
+<body>
+<div id="wrap">
+<ul CLASS ="nav nav-tabs" style="margin: 20px;">
+<li><a href="#/receivable"><font size="3">Add Receivable</font></a>
+<li><a href="#/viewReceivables"><font size="3">View Receivable</font></a>
+<li><a href="#/searchReceivable"><font size="3">Search Receivable</font></a>
+<li><a href="#/updateReceivable"><font size="3">Update Receivable</font></a>
+</ul>
+</div>
+	<div id = "index">
+	<p id = "receivable"></p>
+	<p id = "viewReceivables"></p>
+	<p id = "searchReceivable"></p>
+	<p id = "updateReceivable"></p>
+	</div>
+
+</body>
+</html>

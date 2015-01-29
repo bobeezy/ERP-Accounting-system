@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Update Charts of Account</title>
+
+<script type="text/javascript" src="resources/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="resources/jquery.js"></script>
+</head>
+
+<script>
+$(doocument).ready(function (event){
+	
+	var modelCharts=function(){
+		var self=this;
+		
+		this.chartId=ko.observable();
+		this.chartNumber=ko.observable();
+		this.chartDescription=ko.observable();
+		
+		
+		var chartsData={
+			
+				chartId : this.chartId,
+				chartNumber : this.chartNumber,
+				chartDescription : this.chartDescription,
+		}
+		
+		self.chartsData=ko.observable();
+		self.chartsOfAccountList=ko.observableArray([]);
+		
+		self.searchChart=function(){
+			
+			var chartId=parseFloat($('#chart_Id').val());
+    		$.ajax({
+    			
+    		url:"http://localhost:8080/ERPAccounting/rest/chartController/getChartAcc/"+chartId,
+    		type:'GET',
+    		dataType:'json',
+    		contentType:"application/json",
+    		
+				success:function(chartsData){
+					console.log(chartsData);
+					
+					self.chartId(chartsData.chartId);
+					self.chartNumber(chartsData.chartNumber);
+					self.chartDescription(chartsData.chartDescription);
+				},
+				
+				error:function(chartsData,status)
+				{
+					alert(status+"error occured")
+				}
+				
+			});
+		};
+		
+		self.updateCharts=function(){
+			
+			$.ajax({
+				
+				type='PUT'
+				url:"http://localhost:8080/ERPAccounting/rest/chartController/updateChartsOfAccount",
+				data:ko.toJson(chartsData),
+				dataType:'json',
+				contentType:'application/json',
+				
+				success:function(chartsData)
+				{
+					alert("Successful Edited");
+				},
+				error:function(chartsData,status)
+				{
+					alert(status+"error occured")
+				}
+			});
+			
+			
+		};
+		
+	};
+		ko.applyBindings(new modelCharts());
+			
+});
+
+</script>
+
+<body>
+	<div id="wrapper">
+		<div id="page-wrapper">
+
+		 <label>Charts Id :</label>
+			<input type="number" id="chart_Id" placeholder="'ChartsId'">
+			<input type="submit" data-bind="click:searchChart" class="btn btn-default btn-primary" value="Search" >	
+			<span class="help-block">You need to know the chart id before you search</span>
+
+
+			<div align="center" class="panel panel-default">
+				<div class="panel-heading" class="panel panel-info">Edit Chart
+					of Account Information</div>
+				<table class="table table-striped" class="table table-bordered"
+					class="table table-hover">
+
+					<tbody>
+						<tr>
+							<td>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Chart ID</label> <input
+										type="text" class="form-control" name="chartId"
+										data-bind="value: chartId" readonly="readonly">
+
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Chart Number</label> <input
+										type="text" class="form-control" name="chartNumber"
+										data-bind="value: chartNumber">
+
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Chart Description</label>
+
+									<input type="text" class="form-control" name="chartDescription"
+										data-bind="value: chartDescription">
+
+								</div>
+								<p align="center">
+									<button type="submit" data-bind="click:$root.updateCharts"
+										value="Update Charts of Account" class="btn btn-primary">Update
+										Employee</button>
+								</p>
+							</td>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>
